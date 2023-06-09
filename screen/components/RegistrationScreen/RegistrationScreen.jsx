@@ -1,17 +1,56 @@
-import {StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { useState } from 'react';
 
 export default function RegistrationScreen() { 
+   const [login, setLogin] = useState("");
+   const [email, setEmail] = useState("");
+   const [password, setPassword] = useState("");
+
+  const onRegistration = () => {
+    console.log(`Компонент Registration - login: ${login} email: ${email}, password: ${password}`);
+  };
+  
   return (
     <View style={styles.form}>
+      
       <View style={styles.avatar}></View>
+      
       <View style={styles.titleWrap}>
         <Text style={styles.title}>Реєстрація</Text>
       </View>
-      <TextInput style={styles.input} placeholder={'Логін'} placeholderTextColor={'#BDBDBD'}></TextInput>
-      <TextInput style={[styles.input, { marginTop: 16 }]} placeholder={'Адреса електронної пошти'} placeholderTextColor={'#BDBDBD'}></TextInput>
-      <TextInput style={[styles.input, { marginTop: 16 }]} secureTextEntry={true} placeholder={'Пароль'} placeholderTextColor={'#BDBDBD'}></TextInput>
+      
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+
+        <TextInput
+          style={styles.input}
+          placeholder={'Логін'}
+          placeholderTextColor={'#BDBDBD'}
+          value={login}
+          onChangeText={setLogin}
+        ></TextInput>
+
+        <TextInput
+          style={[styles.input, { marginTop: 16 }]}
+          placeholder={'Адреса електронної пошти'}
+          placeholderTextColor={'#BDBDBD'}
+          value={email}
+          onChangeText={setEmail}
+        ></TextInput>
+
+        <TextInput
+          style={[styles.input, { marginTop: 16 }]}
+          secureTextEntry={true}
+          placeholder={'Пароль'}
+          placeholderTextColor={'#BDBDBD'}
+          value={password}
+          onChangeText={setPassword}
+        ></TextInput>
+        
+      </KeyboardAvoidingView>
           
-      <TouchableOpacity activeOpacity={0.8} style={styles.button} >
+      <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={onRegistration} >
         <Text style={styles.btnTxt}>Зареєструватися</Text>
       </TouchableOpacity>
       <View style={styles.titleWrapQuestion}>

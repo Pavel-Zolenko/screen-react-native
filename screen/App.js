@@ -1,18 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { ImageBackground, StyleSheet, View, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 import bgImage from './assets/images/bg-image.jpg';
-import RegistrationScreen from './assets/RegistrationScreen/RegistrationScreen';
-import LoginScreen from './assets/LoginScreen/LoginScreen';
+import RegistrationScreen from './components/RegistrationScreen/RegistrationScreen';
+import LoginScreen from './components/LoginScreen/LoginScreen';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <ImageBackground source={bgImage} resizeMode="cover" style={styles.image}>
-        <RegistrationScreen/>
-        {/* <LoginScreen/> */}
-      </ImageBackground>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <ImageBackground source={bgImage} resizeMode="cover" style={styles.image}>
+          {/* <RegistrationScreen/> */}
+          <LoginScreen />
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
