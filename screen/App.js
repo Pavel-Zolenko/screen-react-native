@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { useRoute } from './routing';
 

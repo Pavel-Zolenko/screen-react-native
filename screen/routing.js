@@ -10,6 +10,7 @@ import PostsScreen from './screens/main/PostsScreen';
 import CreatePosts from './screens/main/CreatePosts';
 import ProfileScreen from './screens/main/ProfileScreen';
 
+
 import { Octicons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 
@@ -65,6 +66,7 @@ export const useRoute = (isAuth) => {
             }}
             name="ProfileScreen"
             component={ProfileScreen} />
+
     </MainTabs.Navigator>
 };
 

@@ -14,6 +14,7 @@ const initialState = {
 export default function RegistrationScreen() { 
   const [state, setState] = useState(initialState);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
+  const [isHiddenPassword, setIsHiddenPassword] = useState(true);
 
   const navigation = useNavigation();
  
@@ -21,7 +22,6 @@ export default function RegistrationScreen() {
     setIsShowKeybord(false)
     Keyboard.dismiss()
     setState(initialState)
-    console.log(state)
   };
   const keybordHide = () => {
     setIsShowKeybord(false)
@@ -53,32 +53,92 @@ export default function RegistrationScreen() {
               style={styles.keybord}>
       
               <TextInput
-                style={[styles.input, { fontFamily: 'RobotoR' }]}
+                style={[styles.input, {  marginBottom: 16, fontFamily: 'RobotoR' }]}
                 placeholder={'Логін'}
                 placeholderTextColor={'#BDBDBD'}
                 value={state.login}
                 onChangeText={(value) => setState(prevState => ({ ...prevState, login: value }))}
-                onFocus={() => setIsShowKeybord(true)}
-              ></TextInput>
+                onFocus={(event) => {
+                  setIsShowKeybord(true)
+                  event.target.setNativeProps({
+                    style: {
+                      ...styles.input,
+                      backgroundColor: "#FFFFFF",
+                      borderColor: "#FF6C00",
+                    }
+                  });
+                }}
+                 onBlur={(event) =>
+                    event.target.setNativeProps({
+                      style: {
+                        ...styles.input,
+                      },
+                    })
+                  }
+              />
 
               <TextInput
-                style={[styles.input, { marginTop: 16, fontFamily: 'RobotoR' }]}
+                style={[styles.input, {marginBottom: 16, fontFamily: 'RobotoR' }]}
                 placeholder={'Адреса електронної пошти'}
                 placeholderTextColor={'#BDBDBD'}
                 value={state.email}
                 onChangeText={(value) => setState(prevState => ({ ...prevState, email: value }))}
-                onFocus={() => { setIsShowKeybord(true) }}
+                onFocus={(event) => {
+                  setIsShowKeybord(true)
+                  event.target.setNativeProps({
+                    style: {
+                      ...styles.input,
+                      backgroundColor: "#FFFFFF",
+                      borderColor: "#FF6C00",
+                    }
+                  });
+                }}
+                 onBlur={(event) =>
+                    event.target.setNativeProps({
+                      style: {
+                        ...styles.input,
+                      },
+                    })
+                  }
               ></TextInput>
 
+              <View style={styles.inputPassWrap}>
               <TextInput
-                style={[styles.input, { marginTop: 16, fontFamily: 'RobotoR' }]}
+                style={[styles.input, { fontFamily: 'RobotoR' }]}
                 secureTextEntry={true}
                 placeholder={'Пароль'}
                 placeholderTextColor={'#BDBDBD'}
                 value={state.password}
                 onChangeText={(value) => setState(prevState => ({ ...prevState, password: value }))}
-                onFocus={() => { setIsShowKeybord(true) }}
-              ></TextInput>
+                onFocus={(event) => {
+                  setIsShowKeybord(true)
+                  event.target.setNativeProps({
+                    style: {
+                      ...styles.input,
+                      backgroundColor: "#FFFFFF",
+                      borderColor: "#FF6C00",
+                    }
+                  });
+                }}
+                 onBlur={(event) =>
+                    event.target.setNativeProps({
+                      style: {
+                        ...styles.input,
+                      },
+                    })
+                  }
+                />
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => setIsHiddenPassword(!isHiddenPassword)}
+                  style={ styles.passwordBtn}
+                >
+                  <Text>
+                     {isHiddenPassword ? "Показати" : "Приховати"}
+                  </Text>
+              </TouchableOpacity>
+                
+                </View>
         
             </KeyboardAvoidingView>
           
@@ -111,6 +171,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   form: {
+    position: 'relative',
     marginHorizontal: 16,
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 25,
@@ -119,7 +180,6 @@ const styles = StyleSheet.create({
     paddingTop: 92,
     paddingLeft: 16,
     paddingRight: 16,
-    position: 'relative',
     paddingBottom: 66,
   },
   avatar: {
@@ -178,5 +238,15 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontFamily: 'RobotoR',
     color: '#1B4371',
+  },
+  inputPassWrap: {
+    position: 'relative',
+  },
+  passwordBtn: {
+    position: 'absolute',
+    top: 0,
+    right: 16,
+    justifyContent: "center",
+    height: "100%",
   },
 });
