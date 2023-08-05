@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet} from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useDispatch } from "react-redux";
 
 import RegistrationScreen from './screens/auth/RegistrationScreen';
 import LoginScreen from './screens/auth/LoginScreen';
@@ -9,6 +9,8 @@ import LoginScreen from './screens/auth/LoginScreen';
 import PostsScreen from './screens/main/PostsScreen';
 import CreatePosts from './screens/main/CreatePosts';
 import ProfileScreen from './screens/main/ProfileScreen';
+
+import { authSignOutUser } from './redux/auth/authOperation';
 
 
 import { Octicons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -20,10 +22,15 @@ const MainTabs = createBottomTabNavigator();
 
 
 export const useRoute = (isAuth) => {
+    const dispatch = useDispatch();
+    const signOut = () => { 
+        dispatch(authSignOutUser()); 
+    }
+
     if (!isAuth) {
-        return <AuthStack.Navigator initialRouteName="RegistrationScreen">
-            <AuthStack.Screen name="RegistrationScreen" options={{ headerShown: false }} component={RegistrationScreen} />
+        return <AuthStack.Navigator initialRouteName="LoginScreen">
             <AuthStack.Screen name="LoginScreen" options={{ headerShown: false }} component={LoginScreen} />
+            <AuthStack.Screen name="RegistrationScreen" options={{ headerShown: false }} component={RegistrationScreen} />
         </AuthStack.Navigator>
     }
 
@@ -39,7 +46,7 @@ export const useRoute = (isAuth) => {
                 headerTitleAlign: 'center',
                 headerRightContainerStyle: {paddingRight: 20},
                  headerRight: () => (
-              <MaterialIcons name="logout" size={24} color="#BDBDBD" />
+              <MaterialIcons name="logout" size={24} color="#BDBDBD" onPress={signOut}/>
                 ),
                 tabBarActiveTintColor: '#FF6C00',
                 tabBarIcon: ({ focused, color, size }) => <Octicons name="apps" size={size} color={color} />
@@ -69,10 +76,3 @@ export const useRoute = (isAuth) => {
 
     </MainTabs.Navigator>
 };
-
-
-const styles = StyleSheet.create({
-    plus: {
-
-    }
-})

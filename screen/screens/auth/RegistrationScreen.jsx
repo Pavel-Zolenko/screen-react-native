@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
+import { useDispatch } from "react-redux";
+import {authSignUpUser} from '../../redux/auth/authOperation';
 
 import bgImage from '../../assets/images/bg-image.jpg';
 
@@ -8,7 +10,7 @@ const initialState = {
   login: '',
   email: '',
   password: '',
-}
+};
 
 
 export default function RegistrationScreen() { 
@@ -16,16 +18,20 @@ export default function RegistrationScreen() {
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [isHiddenPassword, setIsHiddenPassword] = useState(true);
 
+  const dispath = useDispatch();
   const navigation = useNavigation();
  
-  const onRegistration = () => {
-    setIsShowKeybord(false)
-    Keyboard.dismiss()
-    setState(initialState)
-  };
+
   const keybordHide = () => {
     setIsShowKeybord(false)
     Keyboard.dismiss()
+  };
+
+  const handleSubmit = () => {
+    setIsShowKeybord(false)
+    Keyboard.dismiss()
+    dispath(authSignUpUser(state))
+    setState(initialState)
   };
   
   
@@ -145,10 +151,19 @@ export default function RegistrationScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.button}
-              onPress={() => {onRegistration, navigation.navigate("Home")}}
+              // onPress={() => {
+              //   onRegistration,
+              //     navigation.navigate("Home")
+              // }}
+
+              onPress={
+                handleSubmit 
+              }
+
             >
               <Text style={styles.btnTxt}>Зареєструватися</Text>
             </TouchableOpacity>
+
             <View  style={styles.titleWrapQuestion}>
               <Text style={styles.titleQuestion} onPress={() => navigation.navigate("LoginScreen")}>Вже є акаунт? Увійти</Text>
             </View>

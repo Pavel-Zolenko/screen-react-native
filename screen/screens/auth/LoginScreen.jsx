@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from "react-redux";
+import {authSignInUser} from '../../redux/auth/authOperation';
 
 import bgImage from '../../assets/images/bg-image.jpg';
 
@@ -15,11 +17,13 @@ export default function LoginScreen() {
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [isHiddenPassword, setIsHiddenPassword] = useState(true);
   
+  const dispath = useDispatch();
   const navigation = useNavigation();
   
-  const onLogin = () => {
+  const handleSubmit = () => {
     setIsShowKeybord(false)
     Keyboard.dismiss()
+    dispath(authSignInUser(state))
     setState(initialState)
   };
 
@@ -47,7 +51,7 @@ export default function LoginScreen() {
             >
         
               <TextInput
-                style={[styles.input, {marginBottom: 16, fontFamily: 'RobotoR' }]}
+                style={[styles.input, { marginBottom: 16, fontFamily: 'RobotoR' }]}
                 placeholder={'Адреса електронної пошти'}
                 placeholderTextColor={'#BDBDBD'}
                 value={state.email}
@@ -62,56 +66,56 @@ export default function LoginScreen() {
                     }
                   });
                 }}
-                 onBlur={(event) =>
-                    event.target.setNativeProps({
-                      style: {
-                        ...styles.input,
-                      },
-                    })
-                  }
-              />
-                
-              <View style={styles.inputPassWrap}>
-              <TextInput
-                style={[styles.input, { fontFamily: 'RobotoR' }]}
-                secureTextEntry={true}
-                placeholder={'Пароль'}
-                placeholderTextColor={'#BDBDBD'}
-                value={state.password}
-                onChangeText={(value) => setState(prevState => ({ ...prevState, password: value }))}
-                onFocus={(event) => {
-                  setIsShowKeybord(true)
+                onBlur={(event) =>
                   event.target.setNativeProps({
                     style: {
                       ...styles.input,
-                      backgroundColor: "#FFFFFF",
-                      borderColor: "#FF6C00",
-                    }
-                  });
-                }}
-                 onBlur={(event) =>
+                    },
+                  })
+                }
+              />
+                
+              <View style={styles.inputPassWrap}>
+                <TextInput
+                  style={[styles.input, { fontFamily: 'RobotoR' }]}
+                  secureTextEntry={true}
+                  placeholder={'Пароль'}
+                  placeholderTextColor={'#BDBDBD'}
+                  value={state.password}
+                  onChangeText={(value) => setState(prevState => ({ ...prevState, password: value }))}
+                  onFocus={(event) => {
+                    setIsShowKeybord(true)
+                    event.target.setNativeProps({
+                      style: {
+                        ...styles.input,
+                        backgroundColor: "#FFFFFF",
+                        borderColor: "#FF6C00",
+                      }
+                    });
+                  }}
+                  onBlur={(event) =>
                     event.target.setNativeProps({
                       style: {
                         ...styles.input,
                       },
                     })
                   }
-              />
-              <TouchableOpacity
+                />
+                <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => setIsHiddenPassword(!isHiddenPassword)}
-                  style={ styles.passwordBtn}
+                  style={styles.passwordBtn}
                 >
                   <Text>
-                     {isHiddenPassword ? "Показати" : "Приховати"}
+                    {isHiddenPassword ? "Показати" : "Приховати"}
                   </Text>
-              </TouchableOpacity>
-              </View>  
+                </TouchableOpacity>
+              </View>
 
             </KeyboardAvoidingView>
       
           
-            <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={() => navigation.navigate("Home")} >
+            <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={handleSubmit} >
               <Text style={[styles.btnTxt, { fontFamily: 'RobotoR' }]}>Увійти</Text>
             </TouchableOpacity>
             <View style={styles.titleWrapQuestion}>
