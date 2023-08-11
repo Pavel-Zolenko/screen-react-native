@@ -7,18 +7,12 @@ import CommentsScreen from '../nestedScreens/CommentsScreen';
 
 const NestedScreen = createStackNavigator();
 
-import { useSelector } from 'react-redux';
+
 
 const PostsScreen = () => { 
-    // const userId = ({ auth }) => auth.userId;
-    // const login = ({ auth }) => auth.login;
-    const stateChange = ({ auth }) => auth.stateChange;
     
-    // const id = useSelector(userId);
-    // const loginUser = useSelector(login);
-    // console.log(id)
-    // console.log(loginUser)
-   
+    const stateChange = ({ auth }) => auth.stateChange;
+     
 
 
     return (

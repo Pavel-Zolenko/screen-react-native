@@ -19,6 +19,7 @@ const CreatePosts = ({ navigation }) => {
     const [description, setDescription] = useState('');
     const [descriptionLocation, setDescriptionLocation] = useState('');
     const [location, setLocation] = useState(null);
+
     
     const { userId, login } = useSelector((state) => state.auth)
     
@@ -36,15 +37,15 @@ const CreatePosts = ({ navigation }) => {
             
         })();
     }, []);
-    
+
+     
     
 
     const takePhoto = async () => {
         const photo = await camera.takePictureAsync()
-        console.log('photo',photo)
         setPhoto(photo.uri)
-        
     };
+
 
 
     const sendPhoto = () => {
@@ -96,6 +97,7 @@ const CreatePosts = ({ navigation }) => {
                         userId: userId,
                         photoRef: downloadURL,
                         description: description,
+                        descriptionLocation: descriptionLocation,
                         login: login,
                         location: location,
                     })
@@ -145,7 +147,7 @@ const CreatePosts = ({ navigation }) => {
 
                 <View style={styles.container}>
                 
-
+                    
                     <Camera style={styles.camera} ref={setCamera}>
                         {photo && <View style={styles.photoContainer}>
                             <Image source={{ uri: photo }} style={{ width: 150, height: 150 }} />
@@ -166,17 +168,18 @@ const CreatePosts = ({ navigation }) => {
                             value={description}
                             onChangeText={setDescription}
                         
-                        ></TextInput>
+                        />
 
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Місцевість..."
-                            placeholderTextColor={'#BDBDBD'}
-                            // value={descriptionLocation}
-                            // onChangeText={setDescriptionLocation}
-                        >
-                            <Feather name="map-pin" size={24} color="#DADADA" />
-                        </TextInput>
+                        <View style={styles.inputWrap}>
+                            <Feather name="map-pin" size={24} color="#DADADA" style={styles.svgLocation} />
+                            <TextInput
+                                style={[styles.input, { borderBottomWidth: 0 }]}
+                                placeholder="Місцевість..."
+                                placeholderTextColor={'#BDBDBD'}
+                                value={descriptionLocation}
+                                onChangeText={setDescriptionLocation}
+                            />
+                        </View>
                 
                     </KeyboardAvoidingView>
                 
@@ -270,6 +273,20 @@ const styles = StyleSheet.create({
         marginTop: 150,
         borderRadius: 20,
         backgroundColor: '#F6F6F6',
+    },
+    inputWrap: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        paddingLeft: 30,
+        // borderWidth: 1,
+        // borderColor: 'red',
+         borderBottomWidth: 1,
+        borderBottomColor: '#E8E8E8',
+    },
+    svgLocation: {
+        position: 'absolute',
+
     },
 
 })

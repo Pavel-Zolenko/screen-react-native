@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, Image, SafeAreaView, FlatList } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, SafeAreaView, FlatList, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { db } from '../../firebase/config';
-import { doc, setDoc, updateDoc, addDoc, collection, serverTimestamp, onSnapshot  } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp, onSnapshot  } from "firebase/firestore";
 import { useSelector} from 'react-redux';
 
 const CommentsScreen = ({ route }) => {
     const [comment, setComment] = useState('');
     const [allComments, setAllComments] = useState([]);
-
+    
     const { login } = useSelector(state => state.auth)
 
     const { postId, photoRef } = route.params;
@@ -21,6 +21,8 @@ const CommentsScreen = ({ route }) => {
 
     const createComment = async () => {
         try {
+            Keyboard.dismiss()
+            
             const commentsCollection = collection(db, `posts/${postId}/comments`);
             await addDoc(commentsCollection, {
                 comment,
@@ -39,7 +41,8 @@ const CommentsScreen = ({ route }) => {
         onSnapshot(collection(db, `posts/${postId}/comments`), (snapshot) => {
             const commentsList = snapshot.docs.map((doc) => {
                 const commentData = doc.data();
-                const timestamp = commentData.timestamp.toDate()
+                const timestamp = commentData.timestamp ? commentData.timestamp.toDate() : null;
+                
                                 
                 const options = {
                     day: '2-digit',
@@ -48,7 +51,7 @@ const CommentsScreen = ({ route }) => {
                     hour: '2-digit',
                     minute: '2-digit',
                 };
-
+     
                 const formatter = new Intl.DateTimeFormat('uk-UA', options);
                 const formattedDateTime = formatter.format(timestamp);
                 const formattedDateTimeWithSeparator = formattedDateTime.replace(',', '|').replace('р.', '');
@@ -58,7 +61,6 @@ const CommentsScreen = ({ route }) => {
                     id: doc.id,
                     date: formattedDateTimeWithSeparator,
                     ...doc.data()
-                
                 }
             }
             );
@@ -67,62 +69,69 @@ const CommentsScreen = ({ route }) => {
         })
     };
 
+    const keybordHide = () => {
+        Keyboard.dismiss()
+    };
+
     return (
+        <TouchableWithoutFeedback
+            onPress={keybordHide}
+        >
         
-
-        <View style={styles.container}>
+            <View style={styles.container}>
             
-            <SafeAreaView style={styles.listComments} >
-                <Image
-                    style={styles.img}
-                    source={{
-                        uri: photoRef
-                    }}
-                />
-                <FlatList
-                    data={allComments}
-                    renderItem={({ item }) => (
+                <SafeAreaView style={styles.listComments} >
+                    <Image
+                        style={styles.img}
+                        source={{
+                            uri: photoRef
+                        }}
+                    />
+                    <FlatList
+                        data={allComments}
+                        renderItem={({ item }) => (
                         
-                        <View style={styles.commentContainer} >
+                            <View style={styles.commentContainer} >
                             
-                            <View style={styles.avatarBox}>
-                                <Image
-                                    style={styles.avatar}
-                                    source={{
-                                        uri: 'https://reactnative.dev/img/tiny_logo.png'
-                                    }}
-                                />
+                                <View style={styles.avatarBox}>
+                                    <Image
+                                        style={styles.avatar}
+                                        source={{
+                                            uri: 'https://reactnative.dev/img/tiny_logo.png'
+                                        }}
+                                    />
+                                </View>
+                                <View style={styles.commentBox}>
+                                    <Text style={styles.comment}>{item.comment}</Text>
+                                    <Text style={styles.date}>{item.date}</Text>
+                                </View>
                             </View>
-                            <View style={styles.commentBox}>
-                                <Text style={styles.comment}>{item.comment}</Text>
-                                <Text style={styles.date}>{item.date}</Text>
-                            </View>
-                        </View>
                                       
-                    )}
-                    keyExtractor={item => item.id}
+                        )}
+                        keyExtractor={item => item.id}
                     
-                />
-            </SafeAreaView>
+                    />
+                </SafeAreaView>
 
 
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Коментувати..."
-                    placeholderTextColor={'#BDBDBD'}
-                    value={comment}
-                    onChangeText={setComment}
-                />
-                <MaterialCommunityIcons
-                    name="arrow-up-circle"
-                    size={34} color={'#FF6C00'}
-                    style={styles.iconSend}
-                    onPress={createComment}
-                />
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Коментувати..."
+                        placeholderTextColor={'#BDBDBD'}
+                        value={comment}
+                        onChangeText={setComment}
+                    />
+                    <MaterialCommunityIcons
+                        name="arrow-up-circle"
+                        size={34} color={'#FF6C00'}
+                        style={styles.iconSend}
+                        onPress={createComment}
+                    />
+                </View>
+
             </View>
-
-        </View>
+        </TouchableWithoutFeedback>
 
     );
 }
@@ -186,6 +195,7 @@ const styles = StyleSheet.create({
     img: {
         height: 240,
         marginBottom: 32,
+        borderRadius: 8,
     },
      
 })
