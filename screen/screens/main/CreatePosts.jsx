@@ -15,7 +15,6 @@ import { useSelector} from 'react-redux';
 const CreatePosts = ({ navigation }) => {
     const [camera, setCamera] = useState(null);
     const [photo, setPhoto] = useState(null);
-    const [photoRef, setPhotoRef] = useState(null);
     const [description, setDescription] = useState('');
     const [descriptionLocation, setDescriptionLocation] = useState('');
     const [location, setLocation] = useState(null);

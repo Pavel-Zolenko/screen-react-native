@@ -2,19 +2,40 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
 import { db } from '../../firebase/config';
 import { collection, onSnapshot, getDocs } from 'firebase/firestore'; 
-import { Feather, Fontisto } from '@expo/vector-icons';
+import { Feather, Fontisto, Octicons, MaterialIcons } from '@expo/vector-icons';
+import { authSignOutUser } from '../../redux/auth/authOperation'
+import { useDispatch } from "react-redux";
 
-
-
-const DefaultPostsScreen = ({ route, navigation }) => {
+const DefaultPostsScreen = ({ navigation }) => {
     const [posts, setPosts] = useState([]);
-    
-   
+
+    const dispatch = useDispatch();
+       
     useEffect(() => {
         const unsubscribe = getAllPostsFromFirestore()
         
+        navigation.setOptions({
+            title: 'Публікації',
+            headerShown: true,
+             headerTintColor: '#212121',
+                headerTitleStyle: {
+                    fontWeight: 500,
+                    fontSize: 17,
+                },
+                headerTitleAlign: 'center',
+                headerRightContainerStyle: {paddingRight: 20},
+                 headerRight: () => (
+              <MaterialIcons name="logout" size={24} color="#BDBDBD" onPress={signOut}/>
+                ),
+               
+        });
+        
     }, []);
+
     
+    const signOut = () => {
+        dispatch(authSignOutUser());
+    };
     
 
     const getAllPostsFromFirestore = async () => {
@@ -55,6 +76,7 @@ const DefaultPostsScreen = ({ route, navigation }) => {
     
 
     return (
+        
         < View style={styles.container}>
             
             <FlatList
@@ -90,11 +112,15 @@ const DefaultPostsScreen = ({ route, navigation }) => {
                 )}
             />
              
-        </View>
+            </View>
+            
     );
 };
 
 const styles = StyleSheet.create({
+    saveArea: {
+        flex: 1,
+    },
     container: {
         marginHorizontal: 16,
     },
@@ -116,7 +142,6 @@ const styles = StyleSheet.create({
     },
     txtTitle: {
         fontSize: 16,
-        // fontWeight: 500,
         fontFamily:"RobotoM",
     },
     countComment: {

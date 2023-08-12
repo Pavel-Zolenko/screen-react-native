@@ -3,11 +3,19 @@ import { View, Text, StyleSheet, TextInput, Image, SafeAreaView, FlatList, Touch
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { db } from '../../firebase/config';
 import { addDoc, collection, serverTimestamp, onSnapshot  } from "firebase/firestore";
-import { useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const CommentsScreen = ({ route }) => {
+
+const CommentsScreen = ({ route, navigation  }) => {
     const [comment, setComment] = useState('');
     const [allComments, setAllComments] = useState([]);
+
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerShown: true,
+        });
+    }, []);
     
     const { login } = useSelector(state => state.auth)
 

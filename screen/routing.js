@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useDispatch } from "react-redux";
+import { Feather, Ionicons, Octicons } from '@expo/vector-icons';
 
 import RegistrationScreen from './screens/auth/RegistrationScreen';
 import LoginScreen from './screens/auth/LoginScreen';
@@ -10,10 +10,6 @@ import PostsScreen from './screens/main/PostsScreen';
 import CreatePosts from './screens/main/CreatePosts';
 import ProfileScreen from './screens/main/ProfileScreen';
 
-import { authSignOutUser } from './redux/auth/authOperation';
-
-
-import { Octicons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 
 
@@ -22,10 +18,8 @@ const MainTabs = createBottomTabNavigator();
 
 
 export const useRoute = (isAuth) => {
-    const dispatch = useDispatch();
-    const signOut = () => { 
-        dispatch(authSignOutUser()); 
-    }
+   
+    
 
     if (!isAuth) {
         return <AuthStack.Navigator initialRouteName="LoginScreen">
@@ -34,20 +28,10 @@ export const useRoute = (isAuth) => {
         </AuthStack.Navigator>
     }
 
-    return <MainTabs.Navigator screenOptions={{ tabBarShowLabel: false,  tabBarStyle: { height: 60, padding: 10 }, }}>
+    return <MainTabs.Navigator screenOptions={{ tabBarShowLabel: false, tabBarStyle: { height: 60, padding: 10 }, }}>
         <MainTabs.Screen
             options={{
-                title: "Публікації",
-                headerTintColor: '#212121',
-                headerTitleStyle: {
-                    fontWeight: 500,
-                    fontSize: 17,
-                },
-                headerTitleAlign: 'center',
-                headerRightContainerStyle: {paddingRight: 20},
-                 headerRight: () => (
-              <MaterialIcons name="logout" size={24} color="#BDBDBD" onPress={signOut}/>
-                ),
+                headerShown: false,
                 tabBarActiveTintColor: '#FF6C00',
                 tabBarIcon: ({ focused, color, size }) => <Octicons name="apps" size={size} color={color} />
             }}
@@ -68,11 +52,14 @@ export const useRoute = (isAuth) => {
             component={CreatePosts} />
         <MainTabs.Screen
             options={{
+                headerShown: false,
                 tabBarActiveTintColor: '#FF6C00',
                 tabBarIcon: ({ focused, color, size }) => <Ionicons name="person-outline" size={size} color={color} />
             }}
             name="ProfileScreen"
             component={ProfileScreen} />
 
-    </MainTabs.Navigator>
+        </MainTabs.Navigator>
+       
 };
+
