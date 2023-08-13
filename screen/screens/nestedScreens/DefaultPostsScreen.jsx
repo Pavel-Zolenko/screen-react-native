@@ -2,41 +2,18 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
 import { db } from '../../firebase/config';
 import { collection, onSnapshot, getDocs } from 'firebase/firestore'; 
-import { Feather, Fontisto, Octicons, MaterialIcons } from '@expo/vector-icons';
-import { authSignOutUser } from '../../redux/auth/authOperation'
-import { useDispatch } from "react-redux";
+import { Feather, Fontisto } from '@expo/vector-icons';
+
+
 
 const DefaultPostsScreen = ({ navigation }) => {
     const [posts, setPosts] = useState([]);
-
-    const dispatch = useDispatch();
+ 
        
     useEffect(() => {
         const unsubscribe = getAllPostsFromFirestore()
-        
-        navigation.setOptions({
-            title: 'Публікації',
-            headerShown: true,
-             headerTintColor: '#212121',
-                headerTitleStyle: {
-                    fontWeight: 500,
-                    fontSize: 17,
-                },
-                headerTitleAlign: 'center',
-                headerRightContainerStyle: {paddingRight: 20},
-                 headerRight: () => (
-              <MaterialIcons name="logout" size={24} color="#BDBDBD" onPress={signOut}/>
-                ),
-               
-        });
-        
     }, []);
 
-    
-    const signOut = () => {
-        dispatch(authSignOutUser());
-    };
-    
 
     const getAllPostsFromFirestore = async () => {
     try {

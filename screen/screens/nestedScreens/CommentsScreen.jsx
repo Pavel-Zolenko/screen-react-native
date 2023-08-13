@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, Image, SafeAreaView, FlatList, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, SafeAreaView, FlatList, Keyboard, Alert } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { db } from '../../firebase/config';
 import { addDoc, collection, serverTimestamp, onSnapshot  } from "firebase/firestore";
@@ -28,17 +28,25 @@ const CommentsScreen = ({ route, navigation  }) => {
     
 
     const createComment = async () => {
+        
         try {
-            Keyboard.dismiss()
+            if (comment.length) {
+                
+                Keyboard.dismiss()
             
-            const commentsCollection = collection(db, `posts/${postId}/comments`);
-            await addDoc(commentsCollection, {
-                comment,
-                login,
-                timestamp: serverTimestamp()
-            });
+                const commentsCollection = collection(db, `posts/${postId}/comments`);
+                await addDoc(commentsCollection, {
+                    comment,
+                    login,
+                    timestamp: serverTimestamp()
+                });
 
-            setComment('');
+                setComment('');
+                
+            } else {
+                Alert.alert('коммет не может быть пустым')
+            }
+                    
         } catch (error) {
             console.log('Error creating comment:', error);
         }
@@ -50,8 +58,7 @@ const CommentsScreen = ({ route, navigation  }) => {
             const commentsList = snapshot.docs.map((doc) => {
                 const commentData = doc.data();
                 const timestamp = commentData.timestamp ? commentData.timestamp.toDate() : null;
-                
-                                
+                                        
                 const options = {
                     day: '2-digit',
                     month: 'long',
@@ -63,7 +70,6 @@ const CommentsScreen = ({ route, navigation  }) => {
                 const formatter = new Intl.DateTimeFormat('uk-UA', options);
                 const formattedDateTime = formatter.format(timestamp);
                 const formattedDateTimeWithSeparator = formattedDateTime.replace(',', '|').replace('р.', '');
-
 
                 return {
                     id: doc.id,
@@ -82,9 +88,6 @@ const CommentsScreen = ({ route, navigation  }) => {
     };
 
     return (
-        <TouchableWithoutFeedback
-            onPress={keybordHide}
-        >
         
             <View style={styles.container}>
             
@@ -139,7 +142,6 @@ const CommentsScreen = ({ route, navigation  }) => {
                 </View>
 
             </View>
-        </TouchableWithoutFeedback>
 
     );
 }
