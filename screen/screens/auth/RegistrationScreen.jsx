@@ -151,11 +151,6 @@ export default function RegistrationScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.button}
-              // onPress={() => {
-              //   onRegistration,
-              //     navigation.navigate("Home")
-              // }}
-
               onPress={
                 handleSubmit 
               }

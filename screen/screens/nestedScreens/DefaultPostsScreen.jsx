@@ -72,8 +72,8 @@ const DefaultPostsScreen = ({ navigation }) => {
                                 onPress={() => navigation.navigate("CommentsScreen", { postId: item.id, photoRef: item.photoRef })}
                                 style={styles.commentBtn}
                             >
-                                <Fontisto name="comment" size={22} color="#BDBDBD" />
-                                <Text style={styles.countComment}>{ item.comments.length}</Text>     
+                                <Fontisto name="comment" size={22} color={item.comments.length ? '#FF6C00' : "#BDBDBD" }/>
+                                <Text style={[styles.countComment, item.comments.length && styles.blackText ]}>{ item.comments.length}</Text>     
                             </TouchableOpacity>
 
                             <TouchableOpacity
@@ -132,6 +132,9 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "baseline",
         gap: 6,
+    },
+     blackText: {
+        color: '#212121'
     },
    
 });
